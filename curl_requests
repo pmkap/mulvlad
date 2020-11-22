@@ -1,0 +1,23 @@
+# get key
+curl -X GET \
+    -H "Authorization: Token $ACCOUNT" \
+    https://api.mullvad.net/app/v1/wireguard-keys/$PUBKEY
+
+# delete key
+curl -X DELETE \
+    -H "Authorization: Token $ACCOUNT" \
+    https://api.mullvad.net/app/v1/wireguard-keys/$PUBKEY
+
+# push key
+curl -X POST \
+    -H "Authorization: Token $ACCOUNT" \
+    -H "Content-Type: application/json" \
+    -d '{"pubkey":"7qRKjKwMHtnjZKAsh3t0m/i+39AQlQsTD1MVYB4Beig="}' \
+    https://api.mullvad.net/app/v1/wireguard-keys
+
+# replace key
+curl -X POST \
+    -H "Authorization: Token $ACCOUNT" \
+    -H "Content-Type: application/json" \
+    -d '{"old":"7qRKjKwMHtnjZKAsh3t0m/i+39AQlQsTD1MVYB4Beig=","new":"eLXQIm3owi+HRec55RD6WASS9PIGxlCzv4w/+U5H7hU="}' \
+    https://api.mullvad.net/app/v1/replace-wireguard-key
