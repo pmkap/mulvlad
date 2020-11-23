@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+import argparse
 import importlib.util
 import random
 import subprocess
@@ -9,6 +12,17 @@ from pyroute2 import IPRoute, WireGuard
 spec = importlib.util.spec_from_file_location('config', '/usr/local/etc/mulvlad/config.py')
 config = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(config)
+
+def main():
+    # CLI Interface
+    parser = argparse.ArgumentParser()
+    parser.add_argument('cmd', choices=['start', 'rotate'])
+    args = parser.parse_args()
+
+    if args.cmd == 'start':
+        start()
+    elif args.cmd == 'rotate':
+        rotate()
 
 
 def pick_relay():
@@ -91,7 +105,6 @@ def wg_set(**kwargs):
     if 'endpoint_addr' in peer and 'endpoint_port' not in peer:
         peer['endpoint_port'] = 51820
     
-    print(f'interface: {interface}\npeer: {peer}')
     if peer:
         wg.set(config.IFNAME, **interface, peer=peer)
     else:
@@ -139,3 +152,7 @@ def switch_relay():
 
     server_ip, server_pubkey = pick_relay()
     wg_set(endpoint_addr=server_ip, public_key=server_pubkey, allowed_ips=config.ALLOWED_IPS)
+
+
+if __name__ == '__main__':
+    main()
