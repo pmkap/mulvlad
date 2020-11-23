@@ -1,9 +1,11 @@
 # mulvlad
-Unofficial Mullvad.net client wirtten in Python.
+Unofficial Mullvad.net client written in Python.
 
 Not complete yet.
+
 No warranties.
-Run as roo.
+
+Run as root.
 
 ## Dependencies
 * requests
