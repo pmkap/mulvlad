@@ -1,0 +1,7 @@
+[Unit]
+Description=Unofficial Mullvad.net client.
+Documentation=https://github.com/pmkap/mulvlad
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/mulvlad.py rotate

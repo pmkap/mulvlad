@@ -1,0 +1,10 @@
+[Unit]
+Description=Unofficial Mullvad.net client.
+Documentation=https://github.com/pmkap/mulvlad
+
+[Timer]
+OnCalendar=* *-*-* 00:00:00
+Persistent=false
+
+[Install]
+WantedBy=timers.target

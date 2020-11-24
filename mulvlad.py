@@ -2,11 +2,17 @@
 
 import argparse
 import importlib.util
+import os
 import random
 import subprocess
+import sys
 
-import requests
 from pyroute2 import IPRoute, WireGuard
+import requests
+
+if os.geteuid():
+    print('This should be run with root privileges.')
+    sys.exit(1)
 
 # import global config file
 spec = importlib.util.spec_from_file_location('config', '/usr/local/etc/mulvlad/config.py')

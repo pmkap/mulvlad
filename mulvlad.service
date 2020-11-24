@@ -1,0 +1,13 @@
+[Unit]
+Description=Unofficial Mullvad.net client.
+Documentation=https://github.com/pmkap/mulvlad
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/mulvlad.py start
+#ExecStop=
+ExecReload=/usr/local/bin/mulvlad.py start
+
+[Install]
+WantedBy=multi-user.target
