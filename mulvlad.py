@@ -65,8 +65,11 @@ def replace_key(new):
         raise RuntimeError(str(r.json()))
 
     else:
+        if not os.path.isdir('/var/local/mulvlad/'):
+            os.makedirs('/var/local/mulvlad/')
         with open('/var/local/mulvlad/pubkey', 'w') as file:
             file.write(new)
+
         return r.json()['ipv4_address']
 
 
