@@ -22,11 +22,13 @@ spec.loader.exec_module(config)
 def main():
     # CLI Interface
     parser = argparse.ArgumentParser()
-    parser.add_argument('cmd', choices=['start', 'rotate'])
+    parser.add_argument('cmd', choices=['start', 'stop', 'rotate'])
     args = parser.parse_args()
 
     if args.cmd == 'start':
         start()
+    elif args.cmd == 'stop':
+        stop()
     elif args.cmd == 'rotate':
         rotate()
 
@@ -82,6 +84,14 @@ def create_interface():
         ip.link('add', ifname=config.IFNAME, kind='wireguard')
         idx = ip.link_lookup(ifname=config.IFNAME)[0]
         ip.link('set', index=idx, state='up')
+
+
+def delete_interface():
+    ip = IPRoute()
+    interfaces = [i[0].dump()['attrs'][0][1] for i in ip.get_links()]
+    if config.IFNAME in interfaces:
+        idx = ip.link_lookup(ifname=config.IFNAME)[0]
+        ip.link('del', index=idx)
 
 
 def add_addr(client_ip):
@@ -141,6 +151,10 @@ def start():
     add_addr(client_ip)
     wg_set(private_key=privkey, public_key=server_pubkey, endpoint_addr=server_ip, allowed_ips=config.ALLOWED_IPS)
     add_routes()
+
+
+def stop():
+    delete_interface()
 
 
 def rotate():

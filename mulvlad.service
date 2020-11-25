@@ -6,7 +6,7 @@ Documentation=https://github.com/pmkap/mulvlad
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/local/bin/mulvlad.py start
-#ExecStop=
+ExecStop=/usr/local/bin/mulvlad.py stop
 ExecReload=/usr/local/bin/mulvlad.py start
 
 [Install]
