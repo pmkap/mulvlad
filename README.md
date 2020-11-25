@@ -2,8 +2,11 @@
 **Unofficial** Mullvad.net client written in Python. Similiar to wg-quick, but with some additions to handle keys and relays via the Mullvad.net API.
 
 ## Dependencies
-* requests
 * pyroute2
+* requests
+
+## Installation
+Copy `mulvlad.py` to `/usr/local/bin/` and the Systemd Unit files and Timer to `/etc/systemd/system/`.
 
 ## Usage
 Place a `config.py` file in `/usr/local/etc/mulvlad/` looking the following:
@@ -17,10 +20,13 @@ As this file contains the Mullvad.net account number, it's maybe a good idea to 
 Set everything up:
 `mulvlad.py start`
 
+Tear down:
+`mulvlad.py stop`
+
 Rotate keys:
 `mulvlad.py rotate`
 
 Or use the Systemd Units and Timer.
 
 ## TODO
-* handle overriding default route
+* handle overriding default route when AllowedIPs=0.0.0.0/0 specified.
