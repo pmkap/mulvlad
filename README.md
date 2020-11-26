@@ -30,3 +30,4 @@ Or use the Systemd Units and Timer.
 
 ## TODO
 * handle overriding default route when AllowedIPs=0.0.0.0/0 specified.
+* handle IPv6
