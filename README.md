@@ -15,7 +15,7 @@ ACCOUNT = '9999999999999999'
 IFNAME = 'wg1-mull'
 ALLOWED_IPS = ['10.64.0.1/32']
 ```
-As this file contains the Mullvad.net account number, it's maybe a good idea to make this file `chmod 700` with root as its owner.
+As this file contains the Mullvad.net account number, it's maybe a good idea to make this file `chmod 600` with root as its owner.
 
 Set everything up:
 `mulvlad.py start`
@@ -29,5 +29,4 @@ Rotate keys:
 Or use the Systemd Units and Timer.
 
 ## TODO
-* handle overriding default route when AllowedIPs=0.0.0.0/0 specified.
 * handle IPv6

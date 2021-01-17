@@ -94,6 +94,11 @@ def delete_interface():
     if config.IFNAME in interfaces:
         idx = ip.link_lookup(ifname=config.IFNAME)[0]
         ip.link('del', index=idx)
+    if '0.0.0.0/0' in config.ALLOWED_IPS:
+        # TODO: do this with pyroute2 instead of subprocess
+        rules = ['table main suppress_prefixlength 0', 'not fwmark 51820 table 51820']
+        for rule in rules:
+            subprocess.run(f'ip rule del {rule}'.split())
 
 
 def add_addr(client_ip):
@@ -130,10 +135,29 @@ def wg_set(**kwargs):
 
 
 def add_routes():
+    for i in config.ALLOWED_IPS:
+        if i == '0.0.0.0/0':
+            add_default()
+        else:
+            add_route(i)
+
+
+def add_route(route, table=None):
     ip = IPRoute()
     idx = ip.link_lookup(ifname=config.IFNAME)[0]
-    for i in config.ALLOWED_IPS:
-        ip.route('add', dst=i, oif=idx)
+    ip.route('add', dst=route, oif=idx, table=table)
+
+
+def add_default():
+    ip = IPRoute()
+    wg = WireGuard()
+
+    wg_set(fwmark=51820)
+    add_route('0.0.0.0/0', table=51820)
+
+    # TODO: implement these two in pyroute2
+    subprocess.run('ip rule add not fwmark 51820 table 51820'.split(), check=True)
+    subprocess.run('ip rule add table main suppress_prefixlength 0'.split(), check=True)
 
 
 def genkeypair():
