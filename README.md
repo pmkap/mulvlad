@@ -13,7 +13,9 @@ Place a `config.py` file in `/usr/local/etc/mulvlad/` looking the following:
 ```python
 ACCOUNT = '9999999999999999'
 IFNAME = 'wg1-mull'
-ALLOWED_IPS = ['10.64.0.1/32']
+ALLOWED_IPS = ['0.0.0.0/0']
+LOCATIONS = ['de-']
+PREFER_OWNED = True
 ```
 As this file contains the Mullvad.net account number, it's maybe a good idea to make this file `chmod 600` with root as its owner.
 

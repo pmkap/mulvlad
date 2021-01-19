@@ -32,16 +32,29 @@ def main():
         rotate()
 
 
-def pick_relay():
+def pick_relay(locations=config.LOCATIONS):
     r = requests.get('https://api.mullvad.net/app/v1/relays')
     relays =  r.json()['wireguard']['relays']
+    candidates = []
+    for r in relays:
+        if r['active']:
+            for location in locations:
+                if location in r['location']:
+                    candidates.append(r)
+                    break
 
-    relays = [r for r in relays if r['active'] and 'de-' in r['location']]
+    if not config.PREFER_OWNED:
+        picked = random.choice(candidates)
+    else:
+        owned = []
+        rented = []
+        for r in candidates:
+            if r['owned']:
+                owned.append(r)
+            else:
+                rented.append(r)
+        picked = random.choice(owned) if owned else random.choice(rented)
 
-    owned = [r for r in relays if r['owned']]
-    rented = [r for r in relays if not r['owned']]
-    
-    picked = random.choice(owned) if owned else random.choice(rented)
     return picked['ipv4_addr_in'], picked['public_key']
 
 

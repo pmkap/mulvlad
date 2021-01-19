@@ -1,3 +1,6 @@
+# get servers
+curl https://api.mullvad.net/app/v1/relays
+
 # get key
 curl -X GET \
     -H "Authorization: Token $ACCOUNT" \
