@@ -108,11 +108,8 @@ def delete_interface():
         idx = ip.link_lookup(ifname=config.IFNAME)[0]
         ip.link('del', index=idx)
     if '0.0.0.0/0' in config.ALLOWED_IPS:
-        # TODO: do this with pyroute2 instead of subprocess
-        rules = ['table main suppress_prefixlength 0', 'not fwmark 51820 table 51820']
-        for rule in rules:
-            subprocess.run(f'ip rule del {rule}'.split())
-
+        ip.rule('del', fwmark=51820, flags=2, table=51820)
+        ip.rule('del', FRA_SUPPRESS_PREFIXLEN=0, table=254)
 
 def add_addr(client_ip):
     ip = IPRoute()
@@ -162,15 +159,14 @@ def add_route(route, table=None):
 
 
 def add_default():
+    # see https://www.wireguard.com/netns/#the-classic-solutions
     ip = IPRoute()
     wg = WireGuard()
 
     wg_set(fwmark=51820)
     add_route('0.0.0.0/0', table=51820)
-
-    # TODO: implement these two in pyroute2
-    subprocess.run('ip rule add not fwmark 51820 table 51820'.split(), check=True)
-    subprocess.run('ip rule add table main suppress_prefixlength 0'.split(), check=True)
+    ip.rule('add', fwmark=51820, flags=2, table=51820)
+    ip.rule('add', FRA_SUPPRESS_PREFIXLEN=0, table=254)
 
 
 def genkeypair():
